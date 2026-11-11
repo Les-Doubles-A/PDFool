@@ -1,0 +1,27 @@
+[package]
+name = "pdfool"
+version = "2.0.0"
+edition = "2024"
+description = "Outils PDF locaux : fusion, separation, edition, conversion"
+license = "MIT"
+build = "build.rs"
+
+[[bin]]
+name = "PDFool"
+path = "src/main.rs"
+
+[dependencies]
+lopdf = "0.47"
+eframe = "0.37"
+rfd = "0.18"
+hayro = "0.8"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "bmp", "gif", "tiff", "webp"] }
+
+[build-dependencies]
+winresource = "0.1"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true

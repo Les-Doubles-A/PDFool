@@ -1,6 +1,21 @@
+# Compile PDFool (Rust) puis, si Inno Setup 6 est installe, genere l'installeur.
 $ErrorActionPreference = 'Stop'
-$python = 'C:\Users\Adam_Echalard\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe'
-& $python -m pip install customtkinter pypdf pillow pyinstaller
-& $python convert_icon.py
-& $python -m PyInstaller --noconfirm --clean --onefile --windowed --name PDFool --icon PDFool.ico --runtime-hook rthook_tkinter.py --add-data 'PDFool.ico;.' --add-data 'C:\Users\Adam_Echalard\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tkinter;tkinter' --add-binary 'C:\Users\Adam_Echalard\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\DLLs\_tkinter.pyd;.' --add-data 'C:\Users\Adam_Echalard\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\tcl;tcl' app.py
-Write-Host "Application créée : $PWD\dist\PDFool.exe"
+Set-Location $PSScriptRoot
+
+cargo test --release
+cargo build --release
+New-Item -ItemType Directory -Force dist | Out-Null
+Copy-Item target\release\PDFool.exe dist\PDFool.exe -Force
+Write-Host "Application creee : $PWD\dist\PDFool.exe"
+
+$iscc = @(
+    "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe",
+    "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+    "$env:ProgramFiles\Inno Setup 6\ISCC.exe"
+) | Where-Object { Test-Path $_ } | Select-Object -First 1
+if ($iscc) {
+    & $iscc installer\PDFool.iss
+    Write-Host "Installeur cree dans $PWD\installer\Output"
+} else {
+    Write-Host "Inno Setup 6 introuvable : installeur non genere."
+}

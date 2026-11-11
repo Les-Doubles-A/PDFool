@@ -1,8 +1,8 @@
 ﻿; Installeur Inno Setup de PDFool. Compilation : iscc installer\PDFool.iss
-; Le setup est cree dans installer\Output\PDFool-Setup-1.0.0.exe
+; Le setup est cree dans installer\Output\PDFool-Setup-2.0.0.exe
 #define MyAppExe "PDFool.exe"
 #define MyAppName "PDFool"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "2.0.0"
 #define MyAppURL "https://github.com/Les-Doubles-A/PDFool"
 
 [Setup]
